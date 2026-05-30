@@ -1,0 +1,23 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# local state (never commit)
+/.builder-data/
+/.css-data/
+
+# env (keep .env.example)
+.env
+.env.local
+.env*.local
+
+# misc
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+*.log
+*.png
+.playwright-mcp/

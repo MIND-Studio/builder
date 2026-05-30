@@ -1,0 +1,110 @@
+@import "tailwindcss";
+/* Direct path (not the "@mind-studio/ui/styles.css" exports subpath) so Tailwind's
+   CSS @import resolver finds the file on disk under node_modules. */
+@import "../../node_modules/@mind-studio/ui/dist/styles.css";
+
+/* Generate utilities for the class names used inside the @mind-studio/ui components. */
+@source "../../node_modules/@mind-studio/ui/dist";
+
+/*
+ * mind-builder uses the shared @mind-studio/ui design system on the warm "Ember"
+ * brand (set via data-mind-theme="ember" on <html>; see layout.tsx). Colors,
+ * radius, and dark mode all come from @mind-studio/ui tokens — this file only adds the
+ * few app-specific motion utilities the landing + chat use.
+ */
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100vh;
+}
+
+/* Soft warm wash behind the page — subtle, friendly, not "techy". */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% -5%, color-mix(in oklch, var(--primary) 14%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 95% 105%, color-mix(in oklch, var(--primary) 9%, transparent), transparent 60%);
+  pointer-events: none;
+}
+
+::selection {
+  background: color-mix(in oklch, var(--primary) 22%, transparent);
+}
+
+/* Brand-tinted headline text. */
+.brand-text {
+  background: linear-gradient(
+    90deg,
+    var(--primary),
+    color-mix(in oklch, var(--primary) 55%, white) 55%,
+    var(--primary)
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hueShift 7s ease-in-out infinite;
+}
+@keyframes hueShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ---- Motion ---- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.float-y {
+  animation: floatY 6s ease-in-out infinite;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+.demo-dot {
+  animation: dotBounce 1.2s ease-in-out infinite;
+}
+
+@keyframes auraDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+  50% { transform: translate(20px, -16px) scale(1.08); opacity: 1; }
+}
+.aura {
+  animation: auraDrift 12s ease-in-out infinite;
+}
+
+@keyframes softPulse {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+.soft-pulse {
+  animation: softPulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up, .float-y, .demo-dot, .aura, .soft-pulse, .brand-text {
+    animation: none;
+  }
+  .fade-up { opacity: 1; }
+}

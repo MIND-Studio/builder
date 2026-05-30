@@ -1,0 +1,7 @@
+[
+  {
+    "email": "alice@mind-builder.local",
+    "password": "dev-only-do-not-use-in-prod",
+    "pods": [{ "name": "alice" }]
+  }
+]
