@@ -7,10 +7,11 @@
 @source "../../node_modules/@mind-studio/ui/dist";
 
 /*
- * mind-builder uses the shared @mind-studio/ui design system on the warm "Ember"
- * brand (set via data-mind-theme="ember" on <html>; see layout.tsx). Colors,
+ * mind-builder uses the shared @mind-studio/ui design system on the default Mind
+ * brand (set via data-mind-theme="mind" on <html>; see layout.tsx). Colors,
  * radius, and dark mode all come from @mind-studio/ui tokens — this file only adds the
- * few app-specific motion utilities the landing + chat use.
+ * few app-specific motion utilities the landing + chat use. (The honey-amber
+ * #d97706 survives only as the login-card accent in config.ts, not as the theme.)
  */
 
 html,

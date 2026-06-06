@@ -21,10 +21,12 @@ defaultTheme="dark" enableSystem={false} storageKey="mind-builder-theme-v2">`
 win). Build UI from `@mind-studio/ui` components
 (`Button`, `Card`, `Badge`, `Textarea`, `Avatar`, …) + semantic token classes
 (`bg-primary`, `text-muted-foreground`, `border`, …) — do NOT reintroduce the old
-`--honey-*`/`.glass` tokens. Consumed as a packed tarball
-(`file:../../ui/mind-studio-ui-0.1.0.tgz`); rebuild via `cd ../../ui && pnpm build &&
-pnpm pack`, then in this dir `npm install ../../ui/mind-studio-ui-0.1.0.tgz`. Full
-gotchas: see memory `mind_ui_consumption_gotchas`.
+`--honey-*`/`.glass` tokens. `@mind-studio/ui` (and `@mind-studio/core`) install
+from **GitHub Packages** (registry deps, `package.json` pins `^0.1.0`); a committed
+`.npmrc` scopes `@mind-studio` to `npm.pkg.github.com` — export a token with
+`read:packages` (`export NODE_AUTH_TOKEN=<PAT>`) before `npm install`. To iterate
+on the shared UI locally, bump+publish it, or `npm install` a local `npm pack`
+tarball as a temporary override.
 
 **Voice = for everyone, non-technical.** User-facing copy never says pod, Solid,
 repo, PR, agent, issue, Vite, deploy, or bridge. Plain words: "your app",
