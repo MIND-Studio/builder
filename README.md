@@ -1,4 +1,4 @@
-# mind-builder-v0
+# builder
 
 A lovable.dev-style **"wish an app"** chat builder on Solid. You chat a wish —
 *"build me a landing page for my honey from my bees"* — a coding agent builds a
@@ -6,7 +6,7 @@ real Vite + React app, and a **live preview link** appears in the conversation.
 Iterate by chatting again.
 
 It is a thin **chat UI + server-side orchestrator** on top of the sibling
-[`mind-codespaces-v0`](../mind-codespaces-v0) bridge, which provides the entire
+[`codespaces`](https://github.com/MIND-Studio/codespaces) bridge, which provides the entire
 build engine (repos, the issue-driven coder agent, the build runner, and
 Solid-Pod "Pages" publishing). The builder owns the conversation and project
 model; the bridge owns repos and builds. See [`AGENTS.md`](./AGENTS.md).
@@ -29,14 +29,14 @@ building.
 
 ```bash
 # 1. Start the codespaces bridge + its CSS, with a coder credential.
-cd ../mind-codespaces-v0
+cd ../codespaces
 docker compose up -d                       # CSS on :3011
 OPENROUTER_API_KEY=sk-or-...\
   MIND_AGENT_MODEL=openai/gpt-oss-120b:free \
   npm run dev                              # bridge on :3010
 
 # 2. Start the builder (points at the bridge's CSS so WebIDs line up).
-cd ../mind-builder-v0
+cd ../builder
 cp .env.example .env.local                 # already targets :3010 / :3011
 npm install
 npm run dev                                # builder on :3070

@@ -2,7 +2,7 @@
 
 This version (16.2.6) has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 
-# mind-builder-v0 — agent rules
+# builder — agent rules
 
 A lovable.dev-style **"wish an app"** chat builder on Solid. A user chats a wish
 ("build me a landing page for my honey from my bees"); a coding agent builds it;
@@ -34,11 +34,11 @@ repo, PR, agent, issue, Vite, deploy, or bridge. Plain words: "your app",
 
 ## The one rule that defines this prototype
 
-**This app does not generate code. It orchestrates the `mind-codespaces-v0`
+**This app does not generate code. It orchestrates the `codespaces`
 bridge, which already has the entire build engine** — repo creation, an
 issue-driven opencode coder agent (in Docker), a `.mind/workflow.yml` build
 runner, PR/merge, and Solid-Pod "Pages" publishing that yields a public preview
-URL. mind-builder owns the chat UI, the project model, and pod conversation
+URL. builder owns the chat UI, the project model, and pod conversation
 storage. The bridge stays the single source of truth for repos/coder/builds.
 **Never reimplement git, the coder, the runner, or the publisher here.**
 
@@ -105,7 +105,7 @@ owner on the bridge once) or seeded fallback (`ALLOW_SEEDED_FALLBACK=1` + matchi
 
 ## Storage layout (pod, never a central DB)
 
-Conversations use the SolidOS long-chat layout (reused from mind-chat-v0):
+Conversations use the SolidOS long-chat layout (reused from chat):
 room = `{podRoot}builder/projects/{slug}/chat`, messages in
 `chat/YYYY/MM/DD/chat.ttl`. Builder status / preview cards are also long-chat
 messages with an extra `mind:messageKind` predicate. The authoritative project
