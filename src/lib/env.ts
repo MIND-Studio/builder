@@ -13,7 +13,7 @@
 export const oidcIssuer =
   process.env.NEXT_PUBLIC_SOLID_ISSUER ??
   process.env.NEXT_PUBLIC_OIDC_ISSUER ??
-  "https://pod.mindpods.org/";
+  "https://pods.mindpods.org/";
 
 export const bridgeUrl = trimSlash(
   process.env.NEXT_PUBLIC_CODESPACES_BRIDGE_URL ?? "http://localhost:3010",
