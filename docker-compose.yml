@@ -1,4 +1,4 @@
-# mind-builder-v0 — dev compose
+# builder — dev compose
 #
 # Single CommunitySolidServer v7 instance on port 3071 hosting the demo
 # persona (alice). This stack only matters if you run mind-builder against
@@ -8,13 +8,13 @@
 #
 # Ports use the 307x decade to coexist with sibling prototypes:
 #   - mind-market-v0       300x
-#   - mind-codespaces-v0   301x
+#   - codespaces           301x
 #   - mind-os-v0           302x
-#   - mind-chat-v0         303x
+#   - chat                 303x
 #   - mind-codespaces-ide  304x
 #   - mind-social-network  305x
-#   - mind-drive-v0        306x
-#   - mind-builder-v0      307x  ← this stack (3070 app + 3071 CSS)
+#   - drive                306x
+#   - builder              307x  ← this stack (3070 app + 3071 CSS)
 
 services:
   css:

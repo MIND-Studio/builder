@@ -1,6 +1,6 @@
 /**
  * Client-facing runtime config re-exported from env.ts for ergonomic imports
- * in "use client" components (mirrors the mind-chat-v0 config shape).
+ * in "use client" components (mirrors the chat config shape).
  */
 export { oidcIssuer, bridgeUrl, podBaseUrl } from "@/lib/env";
 

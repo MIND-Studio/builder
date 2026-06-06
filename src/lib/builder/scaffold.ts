@@ -178,7 +178,7 @@ function escapeHtml(s: string): string {
 /**
  * Initialize a git repo from the scaffold and push it to the bridge's
  * Smart-HTTP endpoint on `main`. Mirrors the push flow in
- * mind-codespaces-v0/scripts/seed-demo.ts. Returns once `git push` completes;
+ * codespaces/scripts/seed-demo.ts. Returns once `git push` completes;
  * the bridge's post-receive hook then runs the workflow asynchronously.
  */
 export async function pushScaffold(args: {

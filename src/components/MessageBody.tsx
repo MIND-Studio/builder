@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * Minimal, dependency-free message renderer (ported from mind-chat-v0):
+ * Minimal, dependency-free message renderer (ported from chat):
  *   - Triple-backtick code blocks → <pre>
  *   - Inline code, **bold**, *italic*
  *   - Bare http(s) URLs → <a target="_blank">
