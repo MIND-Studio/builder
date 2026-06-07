@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@mind-studio/ui";
 import { mind } from "@mind-studio/ui/themes";
 import "./globals.css";
+import { FeedbackLauncher } from "@/components/FeedbackLauncher";
 
 export const metadata: Metadata = {
   title: "Mind Builder — wish it, we build it",
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           storageKey="mind-builder-theme-v2"
         >
           {children}
+          <FeedbackLauncher />
         </ThemeProvider>
       </body>
     </html>
