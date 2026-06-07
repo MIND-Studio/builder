@@ -123,3 +123,11 @@ Dev app `:3070`, own CSS `:3071`. The MVP points `NEXT_PUBLIC_POD_BASE_URL` and
 `NEXT_PUBLIC_SOLID_ISSUER` at the **mind-codespaces bridge's CSS (:3011)** so the
 WebID the builder signs in as matches the `owner` the bridge expects. Run the
 bridge (`:3010` + its CSS `:3011`) before the builder.
+
+## Commits & releases
+
+Use [Conventional Commits](https://www.conventionalcommits.org) on `main`
+(`fix:` → patch, `feat:` → minor, `feat!:` / `BREAKING CHANGE:` → major). Releases,
+tags, and `CHANGELOG.md` are automated by **release-please** — never tag manually
+or hand-edit `CHANGELOG.md`. To cut a release, merge the open
+"chore(main): release X.Y.Z" PR. See the README's Releases section.
