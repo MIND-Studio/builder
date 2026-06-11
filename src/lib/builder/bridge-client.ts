@@ -256,6 +256,84 @@ export async function listRuns(
   return call(null, `/api/repos/${owner}/${name}/runs`);
 }
 
+// ---------------------------------------------------------------------------
+// Bring-your-own-key AI settings (the bridge owns the encrypted key vault;
+// we only proxy. Plaintext keys flow request→bridge once and are never
+// returned, stored, or logged here.)
+// ---------------------------------------------------------------------------
+
+export type AiProviderName = "openrouter" | "google" | "anthropic" | "openai";
+
+export type AiModelOption = { id: string; label: string; note?: string };
+
+export type AiCatalogEntry = {
+  name: AiProviderName;
+  label: string;
+  blurb: string;
+  keysUrl: string;
+  keyShapeHint: string;
+  models: AiModelOption[];
+};
+
+export type AiConfiguredProvider = {
+  provider: AiProviderName;
+  /** Last 4 chars of the stored key — all the bridge ever reveals. */
+  hint: string;
+  createdAt: number;
+  updatedAt: number;
+};
+
+export type AiPref = {
+  provider: AiProviderName | null;
+  model: string | null;
+  updatedAt: number | null;
+};
+
+export type AiSummary =
+  | { source: "user-pref"; provider: AiProviderName; providerLabel: string; model: string }
+  | { source: "env-fallback"; provider: "openrouter"; providerLabel: string; model: string }
+  | { source: "none" };
+
+export type AiSettings = {
+  providers: AiConfiguredProvider[];
+  pref: AiPref;
+  summary: AiSummary;
+  catalog: AiCatalogEntry[];
+};
+
+export async function getAiSettings(webId: string): Promise<AiSettings> {
+  return call(webId, "/api/profile/ai");
+}
+
+export async function setAiKey(
+  webId: string,
+  provider: string,
+  apiKey: string,
+): Promise<{ provider: AiConfiguredProvider }> {
+  return call(webId, `/api/profile/ai/keys/${provider}`, {
+    method: "POST",
+    body: { apiKey },
+  });
+}
+
+export async function deleteAiKey(
+  webId: string,
+  provider: string,
+): Promise<{ ok: boolean }> {
+  return call(webId, `/api/profile/ai/keys/${provider}`, { method: "DELETE" });
+}
+
+export async function setAiPref(
+  webId: string,
+  provider: AiProviderName | null,
+  model: string | null,
+): Promise<{ pref: AiPref }> {
+  return call(webId, "/api/profile/ai/pref", {
+    method: "PUT",
+    body: { provider, model },
+  });
+}
+
 /** Whether the bridge holds a delegated pod-write grant for this WebID. */
 export async function getConnection(
   webId: string,

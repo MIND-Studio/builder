@@ -41,11 +41,11 @@ export type MessageKind = "user-wish" | "status" | "agent-question" | "preview-c
 export const STATUS_LABELS: Record<ProjectStatus, string> = {
   "creating-repo": "Creating your project…",
   scaffolding: "Setting up your React app…",
-  "issue-created": "Handing your wish to the agent…",
-  "coder-running": "The agent is writing your code…",
-  "awaiting-user": "The agent has a question for you.",
-  merging: "Adding the agent’s changes…",
-  building: "Building & publishing your site…",
+  "issue-created": "Starting on your wish…",
+  "coder-running": "Writing your code…",
+  "awaiting-user": "I have a question for you.",
+  merging: "Adding the new changes…",
+  building: "Building & publishing your app…",
   published: "Your preview is live.",
   error: "Something went wrong.",
 };

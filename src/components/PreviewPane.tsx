@@ -23,6 +23,7 @@ export function PreviewPane({
 }): React.JSX.Element {
   const [manualReload, setManualReload] = useState(0);
   const live = status === "published" && !!pagesUrl;
+  const failed = status === "error";
   // Cache-bust so the browser re-fetches index.html (its hashed asset refs
   // change every build) on both auto (publish) and manual reloads.
   const version = reloadNonce + manualReload;
@@ -35,15 +36,15 @@ export function PreviewPane({
       <div className="flex items-center justify-between border-b bg-card px-4 py-2">
         <div className="flex items-center gap-2 truncate text-xs font-medium text-muted-foreground">
           <span
-            className="soft-pulse inline-block size-2 rounded-full"
-            style={{ background: "var(--primary)" }}
+            className={`inline-block size-2 rounded-full ${failed ? "" : "soft-pulse"}`}
+            style={{ background: failed ? "var(--destructive)" : "var(--primary)" }}
           />
           <span className="truncate text-foreground">
             {live ? "Your app — live" : statusDetail}
           </span>
         </div>
         <div className="flex items-center gap-2">
-          {pagesUrl ? (
+          {live ? (
             <>
               <Button variant="ghost" size="sm" onClick={() => setManualReload((k) => k + 1)}>
                 Refresh
@@ -72,11 +73,15 @@ export function PreviewPane({
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-4 bg-muted/30 px-6 text-center">
             <span className="grid size-12 place-items-center rounded-2xl bg-primary/10 text-2xl">
-              <span className="soft-pulse">✦</span>
+              <span className={failed ? "" : "soft-pulse"}>✦</span>
             </span>
-            <p className="max-w-xs text-sm font-medium text-foreground">{statusDetail}</p>
+            <p className="max-w-xs text-sm font-medium text-foreground">
+              {failed ? "We couldn’t finish your last change." : statusDetail}
+            </p>
             <p className="max-w-xs text-xs text-muted-foreground">
-              Your app will appear right here the moment it’s ready.
+              {failed
+                ? "Send a new message on the left and we’ll try again."
+                : "Your app will appear right here the moment it’s ready."}
             </p>
           </div>
         )}

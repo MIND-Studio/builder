@@ -29,7 +29,8 @@ function describe(state: ConnState): { label: string; tone: string; pulse: boole
     case "connecting":
       return { label: "Connecting…", tone: "var(--primary)", pulse: true };
     case "connected":
-      return { label: "Live", tone: "var(--primary)", pulse: true };
+      // Not "Live" — next to a failed build that reads as "your site is live".
+      return { label: "Connected", tone: "var(--primary)", pulse: true };
     case "polling":
       return { label: "Updating…", tone: "var(--primary)", pulse: true };
     case "error":

@@ -7,6 +7,7 @@ import { Badge, Button, Card, CardContent } from "@mind-studio/ui";
 import { MindAppLauncher } from "@mind-studio/core/launcher";
 import { podRootFromWebId } from "@mind-studio/core/apps";
 import { useSession } from "@/lib/solid/session";
+import { AiSettings } from "@/components/AiSettings";
 import { Composer } from "@/components/Composer";
 import { ACTIVE_STATUSES, writeMessage } from "@/lib/builder/conversation-client";
 import { usePodConnection } from "@/lib/builder/use-connection";
@@ -140,6 +141,7 @@ export default function BuildIndexPage() {
             podRoot={webid ? podRootFromWebId(webid) : undefined}
             podFetch={solidFetch}
           />
+          <AiSettings webid={webid} />
           <Button
             variant="ghost"
             size="sm"

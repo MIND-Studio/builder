@@ -170,6 +170,7 @@ export default function ProjectPage() {
     <BuildLayout
       title={humanizeSlug(slug)}
       connState={connState}
+      previewUrl={status === "published" ? pagesUrl : null}
       left={
         <>
           <Conversation messages={messages} busy={busy || active} workingLabel={workingLabel} />

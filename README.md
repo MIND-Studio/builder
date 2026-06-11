@@ -28,23 +28,23 @@ This prototype needs the **mind-codespaces bridge running first** — it does th
 building.
 
 ```bash
-# 1. Start the codespaces bridge + its CSS, with a coder credential.
-cd ../codespaces
-docker compose up -d                       # CSS on :3011
+# 1. Start the shared Mind CSS (:3011), then the codespaces bridge.
+(cd ../.. && docker compose up -d)         # shared Mind CSS on :3011 (see ../../SOLID-SERVER.md)
+cd ../../codespaces
 OPENROUTER_API_KEY=sk-or-...\
   MIND_AGENT_MODEL=openai/gpt-oss-120b:free \
   npm run dev                              # bridge on :3010
 
-# 2. Start the builder (points at the bridge's CSS so WebIDs line up).
-cd ../builder
+# 2. Start the builder (points at the shared :3011 so WebIDs line up).
+cd ../apps/builder
 cp .env.example .env.local                 # already targets :3010 / :3011
 npm install
 npm run dev                                # builder on :3070
 ```
 
 Open <http://localhost:3070>, sign in as alice
-(`alice@mind-codespaces.local` / `dev-only-do-not-use-in-prod` on the bridge's
-CSS), and type a wish.
+(`alice@mind.local` / `dev-only-do-not-use-in-prod` on the shared CSS), and type
+a wish.
 
 ## Scripts
 
@@ -60,9 +60,8 @@ CSS), and type a wish.
 | Service | Port |
 |---|---|
 | Builder / Next.js | 3070 |
-| CommunitySolidServer (own, optional) | 3071 |
 | mind-codespaces bridge (required) | 3010 |
-| bridge CSS (required) | 3011 |
+| shared Mind CSS (required) | 3011 |
 
 ## Status
 

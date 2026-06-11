@@ -123,7 +123,7 @@ export async function createProject(
     project,
     status: "coder-running",
     statusBody:
-      "🧰 Set up your project and a starter app — you’ll see a placeholder preview on the right in a few seconds. Now the agent is reading your wish and writing the code. This usually takes a minute or two; hang tight and watch here.",
+      "🧰 Set up your project and a starter app — a placeholder preview is on its way. Now I’m reading your wish and writing the code. This usually takes a minute or two; hang tight and watch here.",
   };
 }
 
@@ -183,7 +183,7 @@ export async function iterateProject(
       project: updated,
       status: "coder-running",
       statusBody:
-        "👍 Got it — I opened a new task for that change and the agent is on it. Watch here for the updated preview.",
+        "👍 Got it — I opened a new task for that change and I’m on it. Watch here for the updated preview.",
     };
   }
 
@@ -193,7 +193,7 @@ export async function iterateProject(
   return {
     project: { ...project, status: "coder-running", statusDetail: STATUS_LABELS["coder-running"] },
     status: "coder-running",
-    statusBody: "👍 Got it — the agent is updating your app with that change. Watch here for the new preview.",
+    statusBody: "👍 Got it — I’m updating your app with that change. Watch here for the new preview.",
   };
 }
 
@@ -236,7 +236,7 @@ export async function reconcile(
     const openForIssue = pulls.filter((p) => p.issueId === issue.id);
     for (const p of openForIssue) {
       try {
-        events.push({ kind: "status", body: "🎨 The agent finished a version — adding it to your site and building it…" });
+        events.push({ kind: "status", body: "🎨 A new version is done — adding it to your app and building it…" });
         await mergePull(webId, owner, name, p.number);
         // The bridge's merge writes `main` via a push that fires the
         // post-receive hook, which runs `.mind/workflow.yml` (vite build) and
@@ -279,9 +279,12 @@ export async function reconcile(
         if (await isPublished(project.targetContainer)) {
           events.push({
             kind: "preview-card",
-            body: progress.lastPublished
-              ? "✅ Your site is ready — updated with the agent’s work! Preview it on the right."
-              : "✨ A starter preview is up on the right while the agent codes your wish. The real version will replace it shortly.",
+            // "building" means we already merged the agent's PR, so this
+            // publish is the real version — even if it's the FIRST successful
+            // publish (the scaffold build may have failed and never published).
+            body: progress.lastPublished || status === "building"
+              ? "✅ Your app is ready — updated with your latest wish!"
+              : "✨ A starter preview of your app is up while I code your wish. The real version will replace it shortly.",
             previewUrl: project.pagesUrl,
           });
           progress.lastPublished = true;
@@ -295,12 +298,12 @@ export async function reconcile(
         if (/delegated identity|seeded fallback|reauthor|OwnerFetchUnavailable|needs-reauthor/i.test(em)) {
           events.push({
             kind: "status",
-            body: `Your site built, but the builder isn’t authorized to write to your pod yet. Open ${bridgeUrl}/connect, sign in, and authorize your pod — then send your wish again.`,
+            body: `Your app was built, but it can’t be added to your own private space yet. Open ${bridgeUrl}/connect, sign in, and allow access — then send your wish again.`,
           });
         } else {
           events.push({
             kind: "status",
-            body: `A build failed${em ? `: ${em.slice(0, 240)}` : ""}. Try rephrasing your wish, or ask the agent to fix the error.`,
+            body: `A build failed${em ? `: ${em.slice(0, 240)}` : ""}. Try rephrasing your wish, or ask me to fix the error.`,
           });
         }
         status = "error";
@@ -321,7 +324,7 @@ export async function reconcile(
           if (!progress.lastPublished) {
             events.push({
               kind: "preview-card",
-              body: "✅ Your site is ready — preview it on the right.",
+              body: "✅ Your app is ready.",
               previewUrl: project.pagesUrl,
             });
             progress.lastPublished = true;
@@ -341,7 +344,12 @@ export async function reconcile(
   // forever, since steps 1–3 see no new pulls/comments/builds.
   try {
     const { runs } = await listIssueAgentRuns(owner, name, project.lastIssue);
-    const fresh = runs.filter((rr) => rr.id > progress.lastAgentRunId);
+    // Only consider runs that have FINISHED. A run first seen while still
+    // "running" must not advance the watermark, or its later error is never
+    // surfaced and the UI hangs on "working…" forever.
+    const fresh = runs.filter(
+      (rr) => rr.id > progress.lastAgentRunId && rr.status !== "running",
+    );
     if (fresh.length) {
       progress.lastAgentRunId = Math.max(progress.lastAgentRunId, ...fresh.map((rr) => rr.id));
       // Only surface a failure if nothing good happened this round (no merge,
@@ -349,11 +357,18 @@ export async function reconcile(
       const errored = fresh.find((rr) => rr.status === "error");
       if (errored && status !== "published" && status !== "building" && status !== "awaiting-user") {
         const timedOut = /exit 124|timed out|timeout/i.test(errored.summary ?? "");
+        // "no provider configured" = the bridge has no AI key for this user —
+        // an operator/setup problem, not something rephrasing can fix.
+        const noProvider = /no provider configured|no ai provider/i.test(
+          `${errored.summary ?? ""} ${errored.errorMessage ?? ""}`,
+        );
         events.push({
           kind: "status",
-          body: timedOut
-            ? "⏱️ The agent ran out of time on that change and didn’t finish. Try again, or split it into a smaller, more specific request."
-            : `The agent hit a problem and couldn’t complete that change${errored.errorMessage ? ` (${errored.errorMessage.slice(0, 160)})` : ""}. Try rephrasing or resending your request.`,
+          body: noProvider
+            ? "🔌 No AI is set up to build for you yet. Open “Your AI” on the My builds page and add your own key — then send your wish again."
+            : timedOut
+              ? "⏱️ I ran out of time on that change and didn’t finish. Try again, or split it into a smaller, more specific request."
+              : `I hit a problem and couldn’t complete that change${errored.errorMessage ? ` (${errored.errorMessage.slice(0, 160)})` : ""}. Try rephrasing or resending your request — or add your own AI key under “Your AI” on the My builds page for a more reliable AI.`,
         });
         status = "error";
       }
