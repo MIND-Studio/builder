@@ -72,6 +72,12 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates tini \
  && rm -rf /var/lib/apt/lists/*
 
+# WORKDIR /app is root-owned but the server runs as USER node, so the relative
+# default `./.builder-data` (= /app/.builder-data) can't be created (EACCES).
+# Pre-create the non-authoritative sqlite cache dir, owned by node (must happen
+# as root, before the USER switch — node can't write to root-owned /app).
+RUN mkdir -p /app/.builder-data && chown node:node /app/.builder-data
+
 USER node
 
 COPY --chown=node:node --from=builder /app/.next/standalone ./
@@ -80,7 +86,8 @@ COPY --chown=node:node --from=builder /app/public ./public
 
 ENV NODE_ENV=production \
     PORT=3000 \
-    HOSTNAME=0.0.0.0
+    HOSTNAME=0.0.0.0 \
+    INDEXER_DATA_DIR=/app/.builder-data
 
 EXPOSE 3000
 
