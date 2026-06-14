@@ -30,6 +30,13 @@ export type BridgeMode = "dev" | "delegated";
 export const bridgeMode: BridgeMode =
   process.env.BUILDER_BRIDGE_MODE === "delegated" ? "delegated" : "dev";
 
+// Shared secret for the bridge's trusted-service auth. When set, the builder
+// server authenticates to the bridge as the requesting WebID via
+// X-Mind-Service-Secret + X-Mind-On-Behalf-Of — the production path (the dev
+// X-Mind-Dev-WebId header is ignored by a prod bridge). Server-only.
+export const bridgeServiceSecret =
+  process.env.BUILDER_BRIDGE_SERVICE_SECRET?.trim() || null;
+
 export const indexerDataDir =
   process.env.INDEXER_DATA_DIR ?? "./.builder-data";
 
