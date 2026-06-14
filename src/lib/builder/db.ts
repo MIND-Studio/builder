@@ -1,5 +1,6 @@
 import Database from "better-sqlite3";
 import { mkdirSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { indexerDataDir } from "@/lib/env";
@@ -16,12 +17,9 @@ declare global {
 
 const SCHEMA_PATH = join(dirname(fileURLToPath(import.meta.url)), "schema.sql");
 
-export function getDb(): Database.Database {
-  const cached = globalThis[GLOBAL_KEY];
-  if (cached) return cached;
-
-  mkdirSync(indexerDataDir, { recursive: true });
-  const db = new Database(join(indexerDataDir, "builder.db"));
+function openAt(dir: string): Database.Database {
+  mkdirSync(dir, { recursive: true });
+  const db = new Database(join(dir, "builder.db"));
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
   db.exec(readFileSync(SCHEMA_PATH, "utf-8"));
@@ -33,6 +31,31 @@ export function getDb(): Database.Database {
     );
   } catch {
     // column already exists — fine
+  }
+  return db;
+}
+
+export function getDb(): Database.Database {
+  const cached = globalThis[GLOBAL_KEY];
+  if (cached) return cached;
+
+  let db: Database.Database;
+  try {
+    db = openAt(indexerDataDir);
+  } catch (err) {
+    // This sqlite file is a non-authoritative convenience cache (the pod is the
+    // source of truth). In a read-only/non-writable CWD (e.g. the prod
+    // container's root-owned WORKDIR run as an unprivileged user) the configured
+    // dir can't be created — don't 500 the whole app over a cache. Fall back to
+    // a guaranteed-writable temp dir.
+    const fallback = join(tmpdir(), "builder-data");
+    const e = err as NodeJS.ErrnoException;
+    console.warn(
+      `[builder/db] cannot use INDEXER_DATA_DIR (${indexerDataDir}): ${
+        e.code ?? e.message
+      } — falling back to ${fallback}`,
+    );
+    db = openAt(fallback);
   }
   globalThis[GLOBAL_KEY] = db;
   return db;
