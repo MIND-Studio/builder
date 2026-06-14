@@ -68,8 +68,10 @@ RUN npm run build
 FROM node:22-bookworm-slim AS runtime
 WORKDIR /app
 
+# git: the orchestrator seeds each new app by running `git init/commit/push`
+# locally to push the scaffold to the bridge (see lib/builder/scaffold.ts).
 RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates tini \
+ && apt-get install -y --no-install-recommends ca-certificates tini git \
  && rm -rf /var/lib/apt/lists/*
 
 # WORKDIR /app is root-owned but the server runs as USER node, so the relative
