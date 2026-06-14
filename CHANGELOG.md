@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/MIND-Studio/builder/compare/v0.2.0...v0.3.0) (2026-06-14)
+
+
+### Features
+
+* authenticate to the bridge via a trusted-service secret (prod) ([#8](https://github.com/MIND-Studio/builder/issues/8)) ([8c43f58](https://github.com/MIND-Studio/builder/commit/8c43f5835dd4077bb3d54bb60eb503f603956d1f))
+
+
+### Bug Fixes
+
+* fall back to a writable sqlite cache dir (prod EACCES on /build) ([#6](https://github.com/MIND-Studio/builder/issues/6)) ([84cf29a](https://github.com/MIND-Studio/builder/commit/84cf29af1a8e3a6f1ed7c57ecb9de963a851e421))
+* install git in the builder runtime image (scaffold push) ([#9](https://github.com/MIND-Studio/builder/issues/9)) ([cf2c775](https://github.com/MIND-Studio/builder/commit/cf2c775562b34ff0b81dcba109cbc9423fd52b76))
+
 ## [0.2.0](https://github.com/MIND-Studio/builder/compare/v0.1.3...v0.2.0) (2026-06-11)
 
 
