@@ -2,7 +2,7 @@
  * Client-facing runtime config re-exported from env.ts for ergonomic imports
  * in "use client" components (mirrors the chat config shape).
  */
-export { oidcIssuer, bridgeUrl, podBaseUrl } from "@/lib/env";
+export { bridgeUrl, oidcIssuer, podBaseUrl } from "@/lib/env";
 
 import { podBaseUrl as POD_BASE } from "@/lib/env";
 

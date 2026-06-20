@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Avatar, AvatarFallback, Button } from "@mind-studio/ui";
-import { MessageBody } from "./MessageBody";
+import { useEffect, useRef } from "react";
 import type { ChatMessage } from "@/lib/solid/chat";
+import { MessageBody } from "./MessageBody";
 
 /** Renders the builder conversation as a friendly chat: your wishes (right),
  *  the builder's replies + "your app is ready" cards (left), and build-progress
@@ -62,9 +62,7 @@ function renderMessage(m: ChatMessage): React.JSX.Element {
             <div className="overflow-hidden rounded-2xl rounded-bl-md border bg-card shadow-sm">
               <div className="flex items-center gap-2 px-4 pt-3.5">
                 <span className="soft-pulse inline-block size-2 rounded-full bg-primary" />
-                <span className="text-[11px] font-semibold text-primary">
-                  Your app is ready 🎉
-                </span>
+                <span className="text-[11px] font-semibold text-primary">Your app is ready 🎉</span>
               </div>
               <p className="px-4 pt-2 text-[14px] leading-relaxed text-foreground">{m.body}</p>
               {m.previewUrl ? (
@@ -175,9 +173,7 @@ function UserAvatar({ initial }: { initial: string }): React.JSX.Element {
 function Time({ iso }: { iso: string }): React.JSX.Element | null {
   const t = formatTime(iso);
   if (!t) return null;
-  return (
-    <span className="mt-1 px-1 text-[10px] tabular-nums text-muted-foreground/70">{t}</span>
-  );
+  return <span className="mt-1 px-1 text-[10px] tabular-nums text-muted-foreground/70">{t}</span>;
 }
 
 function formatTime(iso: string): string {

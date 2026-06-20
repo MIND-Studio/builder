@@ -1,18 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { podRootFromWebId } from "@mind-studio/core/apps";
+import { MindAppLauncher } from "@mind-studio/core/launcher";
+import { Badge, Button, Card, CardContent } from "@mind-studio/ui";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Badge, Button, Card, CardContent } from "@mind-studio/ui";
-import { MindAppLauncher } from "@mind-studio/core/launcher";
-import { podRootFromWebId } from "@mind-studio/core/apps";
-import { useSession } from "@/lib/solid/session";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AiSettings } from "@/components/AiSettings";
 import { Composer } from "@/components/Composer";
 import { ACTIVE_STATUSES, writeMessage } from "@/lib/builder/conversation-client";
-import { usePodConnection } from "@/lib/builder/use-connection";
-import { humanizeSlug } from "@/lib/util/slug";
 import type { Project, ProjectStatus } from "@/lib/builder/types";
+import { usePodConnection } from "@/lib/builder/use-connection";
+import { useSession } from "@/lib/solid/session";
+import { humanizeSlug } from "@/lib/util/slug";
 
 const SUGGESTIONS = [
   "A website for my honey from my bees",
@@ -103,7 +103,11 @@ export default function BuildIndexPage() {
         const data = (await res.json()) as { project: Project; statusBody: string };
         const slug = data.project.slug;
         // Seed the conversation with the wish + first status.
-        await writeMessage(solidFetch, webid, slug, { body: wish, kind: "user-wish", author: webid });
+        await writeMessage(solidFetch, webid, slug, {
+          body: wish,
+          kind: "user-wish",
+          author: webid,
+        });
         await writeMessage(solidFetch, webid, slug, { body: data.statusBody, kind: "status" });
         router.push(`/build/${slug}`);
       } catch (e) {
@@ -115,9 +119,7 @@ export default function BuildIndexPage() {
   );
 
   if (loading || !loggedIn) {
-    return (
-      <main className="mx-auto max-w-2xl px-6 py-16 text-muted-foreground">Loading…</main>
-    );
+    return <main className="mx-auto max-w-2xl px-6 py-16 text-muted-foreground">Loading…</main>;
   }
 
   const firstName = webid ? humanizeOwner(webid) : "there";
@@ -159,9 +161,8 @@ export default function BuildIndexPage() {
               One quick step
             </div>
             <p className="mt-1.5 text-sm text-foreground">
-              Let Mind Builder save the things you make to your own private space.
-              You’ll approve it just once — no extra password, and it’s remembered
-              next time.
+              Let Mind Builder save the things you make to your own private space. You’ll approve it
+              just once — no extra password, and it’s remembered next time.
             </p>
             <Button onClick={connect} disabled={connecting} className="mt-3">
               {connecting ? "Waiting for your approval…" : "Allow & continue"}
@@ -209,9 +210,7 @@ export default function BuildIndexPage() {
           Setting up your project… this only takes a moment.
         </p>
       ) : null}
-      {error ? (
-        <p className="mt-4 text-center text-[13px] text-destructive">{error}</p>
-      ) : null}
+      {error ? <p className="mt-4 text-center text-[13px] text-destructive">{error}</p> : null}
 
       <section className="mt-12">
         <h2 className="mb-3 text-sm font-semibold text-foreground">Your projects</h2>

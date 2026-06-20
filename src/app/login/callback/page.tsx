@@ -1,12 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { EVENTS, events, handleIncomingRedirect } from "@inrupt/solid-client-authn-browser";
 import { useRouter } from "next/navigation";
-import {
-  EVENTS,
-  events,
-  handleIncomingRedirect,
-} from "@inrupt/solid-client-authn-browser";
+import { useEffect } from "react";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -45,9 +41,5 @@ export default function CallbackPage() {
     };
   }, [router]);
 
-  return (
-    <main className="mx-auto max-w-md px-6 py-16 text-muted-foreground">
-      Signing you in…
-    </main>
-  );
+  return <main className="mx-auto max-w-md px-6 py-16 text-muted-foreground">Signing you in…</main>;
 }

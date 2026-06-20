@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   Dialog,
@@ -17,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@mind-studio/ui";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   AiCatalogEntry,
   AiProviderName,
@@ -174,9 +174,8 @@ export function AiSettings({ webid }: { webid: string | null }) {
         <DialogHeader>
           <DialogTitle>Your AI</DialogTitle>
           <DialogDescription>
-            Mind Builder uses an AI to write your apps. The built-in one is free
-            but can be slow or busy. Add your own key to build with a faster,
-            smarter AI — billed to your own account.
+            Mind Builder uses an AI to write your apps. The built-in one is free but can be slow or
+            busy. Add your own key to build with a faster, smarter AI — billed to your own account.
           </DialogDescription>
         </DialogHeader>
 

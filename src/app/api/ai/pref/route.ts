@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  BridgeError,
-  setAiPref,
-  type AiProviderName,
-} from "@/lib/builder/bridge-client";
+import { type AiProviderName, BridgeError, setAiPref } from "@/lib/builder/bridge-client";
 import { log } from "@/lib/util/log";
 
 export const runtime = "nodejs";
@@ -26,10 +22,7 @@ export async function PUT(req: Request) {
 
   try {
     const saved = await setAiPref(webid, body.provider ?? null, body.model ?? null);
-    log.info(
-      { event: "builder.ai.pref.saved", provider: body.provider ?? null },
-      "ai pref saved",
-    );
+    log.info({ event: "builder.ai.pref.saved", provider: body.provider ?? null }, "ai pref saved");
     return NextResponse.json(saved);
   } catch (e) {
     const status = e instanceof BridgeError ? e.status : 500;

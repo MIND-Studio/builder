@@ -26,14 +26,22 @@ export function slugifyWish(text: string): string {
  */
 export function humanizeSlug(slug: string): string {
   const STOP = new Set([
-    "build", "me", "a", "an", "the", "create", "make", "my", "please", "app", "some",
+    "build",
+    "me",
+    "a",
+    "an",
+    "the",
+    "create",
+    "make",
+    "my",
+    "please",
+    "app",
+    "some",
   ]);
   let words = slug.split("-").filter(Boolean);
   while (words.length > 1 && STOP.has(words[0] ?? "")) words = words.slice(1);
   if (words.length === 0) words = slug.split("-").filter(Boolean);
-  const title = words
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+  const title = words.map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
   return title || slug;
 }
 

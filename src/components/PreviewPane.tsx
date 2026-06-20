@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@mind-studio/ui";
+import { useState } from "react";
 import type { ProjectStatus } from "@/lib/builder/types";
 
 /** Right-hand live preview: an iframe of the published site, or a friendly
@@ -27,9 +27,7 @@ export function PreviewPane({
   // Cache-bust so the browser re-fetches index.html (its hashed asset refs
   // change every build) on both auto (publish) and manual reloads.
   const version = reloadNonce + manualReload;
-  const src = pagesUrl
-    ? `${pagesUrl}${pagesUrl.includes("?") ? "&" : "?"}v=${version}`
-    : null;
+  const src = pagesUrl ? `${pagesUrl}${pagesUrl.includes("?") ? "&" : "?"}v=${version}` : null;
 
   return (
     <div className="flex h-full flex-col bg-muted/30">

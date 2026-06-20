@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 /**
  * Minimal, dependency-free message renderer (ported from chat):
@@ -73,7 +73,8 @@ function parseBlocks(text: string): Block[] {
   return out;
 }
 
-const INLINE_RE = /(`[^`]+`)|(\*\*\*[^*]+\*\*\*)|(\*\*[^*]+\*\*)|(__[^_]+__)|(\*[^*\s](?:[^*]*[^*\s])?\*)|((?<![A-Za-z0-9])_[^_\s](?:[^_]*[^_\s])?_(?![A-Za-z0-9]))|(https?:\/\/[^\s<>"]+[^\s<>".,;:!?)\]])/g;
+const INLINE_RE =
+  /(`[^`]+`)|(\*\*\*[^*]+\*\*\*)|(\*\*[^*]+\*\*)|(__[^_]+__)|(\*[^*\s](?:[^*]*[^*\s])?\*)|((?<![A-Za-z0-9])_[^_\s](?:[^_]*[^_\s])?_(?![A-Za-z0-9]))|(https?:\/\/[^\s<>"]+[^\s<>".,;:!?)\]])/g;
 
 function renderInline(text: string): React.ReactNode[] {
   const out: React.ReactNode[] = [];

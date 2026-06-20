@@ -1,39 +1,32 @@
 import "server-only";
-import {
-  createRepo,
-  getRepo,
-  enablePages,
-  mintToken,
-  createIssue,
-  addComment,
-  getIssue,
-  listPulls,
-  mergePull,
-  listRuns,
-  listIssueAgentRuns,
-  isPublished,
-  BridgeError,
-} from "./bridge-client";
-import { pushScaffold } from "./scaffold";
-import {
-  getProject,
-  upsertProject,
-  setStatus,
-  getProgress,
-  setProgress,
-  slugExists,
-} from "./db";
-import { buildIssueBody, buildIssueTitle, buildAppTitle } from "./prompt";
-import { slugifyWish, shortSuffix } from "@/lib/util/slug";
 import { bridgeUrl } from "@/lib/env";
 import {
   ownerFromWebId,
   podRootFromWebId,
-  projectTargetContainer,
   previewUrlFor,
+  projectTargetContainer,
 } from "@/lib/solid/pod";
-import { STATUS_LABELS, type MessageKind, type Project, type ProjectStatus } from "./types";
 import { log } from "@/lib/util/log";
+import { shortSuffix, slugifyWish } from "@/lib/util/slug";
+import {
+  addComment,
+  BridgeError,
+  createIssue,
+  createRepo,
+  enablePages,
+  getIssue,
+  getRepo,
+  isPublished,
+  listIssueAgentRuns,
+  listPulls,
+  listRuns,
+  mergePull,
+  mintToken,
+} from "./bridge-client";
+import { getProgress, getProject, setProgress, setStatus, slugExists, upsertProject } from "./db";
+import { buildAppTitle, buildIssueBody, buildIssueTitle } from "./prompt";
+import { pushScaffold } from "./scaffold";
+import { type MessageKind, type Project, type ProjectStatus, STATUS_LABELS } from "./types";
 
 /** An event the server observed that the browser should persist to pod chat. */
 export type BuilderEvent = { kind: MessageKind; body: string; previewUrl?: string };
@@ -157,7 +150,10 @@ export async function iterateProject(
     const { issue } = await getIssue(project.repoOwner, project.repoName, project.lastIssue);
     issueOpen = issue.status === "open";
   } catch (e) {
-    log.warn({ event: "builder.iterate.issue-read-failed", slug, err: String(e) }, "issue read failed");
+    log.warn(
+      { event: "builder.iterate.issue-read-failed", slug, err: String(e) },
+      "issue read failed",
+    );
   }
 
   if (!issueOpen) {
@@ -188,12 +184,19 @@ export async function iterateProject(
   }
 
   // Current task still in flight → continue the same thread.
-  await addComment(webId, project.repoOwner, project.repoName, project.lastIssue, buildIssueBody(wish, true));
+  await addComment(
+    webId,
+    project.repoOwner,
+    project.repoName,
+    project.lastIssue,
+    buildIssueBody(wish, true),
+  );
   setStatus(slug, "coder-running", STATUS_LABELS["coder-running"], now());
   return {
     project: { ...project, status: "coder-running", statusDetail: STATUS_LABELS["coder-running"] },
     status: "coder-running",
-    statusBody: "👍 Got it — I’m updating your app with that change. Watch here for the new preview.",
+    statusBody:
+      "👍 Got it — I’m updating your app with that change. Watch here for the new preview.",
   };
 }
 
@@ -236,7 +239,10 @@ export async function reconcile(
     const openForIssue = pulls.filter((p) => p.issueId === issue.id);
     for (const p of openForIssue) {
       try {
-        events.push({ kind: "status", body: "🎨 A new version is done — adding it to your app and building it…" });
+        events.push({
+          kind: "status",
+          body: "🎨 A new version is done — adding it to your app and building it…",
+        });
         await mergePull(webId, owner, name, p.number);
         // The bridge's merge writes `main` via a push that fires the
         // post-receive hook, which runs `.mind/workflow.yml` (vite build) and
@@ -247,12 +253,18 @@ export async function reconcile(
         status = "building";
       } catch (e) {
         const msg = e instanceof BridgeError ? e.message : String(e);
-        events.push({ kind: "status", body: `Couldn’t merge automatically (${msg}). You may need to rephrase or retry.` });
+        events.push({
+          kind: "status",
+          body: `Couldn’t merge automatically (${msg}). You may need to rephrase or retry.`,
+        });
         status = "error";
       }
     }
   } catch (e) {
-    log.warn({ event: "builder.reconcile.issue-failed", slug, err: String(e) }, "issue read failed");
+    log.warn(
+      { event: "builder.reconcile.issue-failed", slug, err: String(e) },
+      "issue read failed",
+    );
   }
 
   // 3. Workflow builds that finished since last poll → preview card / error.
@@ -282,9 +294,10 @@ export async function reconcile(
             // "building" means we already merged the agent's PR, so this
             // publish is the real version — even if it's the FIRST successful
             // publish (the scaffold build may have failed and never published).
-            body: progress.lastPublished || status === "building"
-              ? "✅ Your app is ready — updated with your latest wish!"
-              : "✨ A starter preview of your app is up while I code your wish. The real version will replace it shortly.",
+            body:
+              progress.lastPublished || status === "building"
+                ? "✅ Your app is ready — updated with your latest wish!"
+                : "✨ A starter preview of your app is up while I code your wish. The real version will replace it shortly.",
             previewUrl: project.pagesUrl,
           });
           progress.lastPublished = true;
@@ -295,7 +308,11 @@ export async function reconcile(
         // The most common "build failed" in practice is actually a publish
         // failure: the bridge has no delegated write access to this user's
         // pod. Detect it and point them at the bridge's /connect flow.
-        if (/delegated identity|seeded fallback|reauthor|OwnerFetchUnavailable|needs-reauthor/i.test(em)) {
+        if (
+          /delegated identity|seeded fallback|reauthor|OwnerFetchUnavailable|needs-reauthor/i.test(
+            em,
+          )
+        ) {
           events.push({
             kind: "status",
             body: `Your app was built, but it can’t be added to your own private space yet. Open ${bridgeUrl}/connect, sign in, and allow access — then send your wish again.`,
@@ -347,15 +364,18 @@ export async function reconcile(
     // Only consider runs that have FINISHED. A run first seen while still
     // "running" must not advance the watermark, or its later error is never
     // surfaced and the UI hangs on "working…" forever.
-    const fresh = runs.filter(
-      (rr) => rr.id > progress.lastAgentRunId && rr.status !== "running",
-    );
+    const fresh = runs.filter((rr) => rr.id > progress.lastAgentRunId && rr.status !== "running");
     if (fresh.length) {
       progress.lastAgentRunId = Math.max(progress.lastAgentRunId, ...fresh.map((rr) => rr.id));
       // Only surface a failure if nothing good happened this round (no merge,
       // no published preview) — a successful run already produced a PR/comment.
       const errored = fresh.find((rr) => rr.status === "error");
-      if (errored && status !== "published" && status !== "building" && status !== "awaiting-user") {
+      if (
+        errored &&
+        status !== "published" &&
+        status !== "building" &&
+        status !== "awaiting-user"
+      ) {
         const timedOut = /exit 124|timed out|timeout/i.test(errored.summary ?? "");
         // "no provider configured" = the bridge has no AI key for this user —
         // an operator/setup problem, not something rephrasing can fix.
@@ -374,7 +394,10 @@ export async function reconcile(
       }
     }
   } catch (e) {
-    log.warn({ event: "builder.reconcile.agentruns-failed", slug, err: String(e) }, "agent-runs read failed");
+    log.warn(
+      { event: "builder.reconcile.agentruns-failed", slug, err: String(e) },
+      "agent-runs read failed",
+    );
   }
 
   setProgress(progress);
