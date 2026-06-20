@@ -16,6 +16,3 @@ export const feedbackInbox =
 
 /** Display name used by the shared login card + last-identity hint. */
 export const APP_NAME = "Builder";
-
-/** Honey-amber accent — distinct from every other sibling prototype. */
-export const ACCENT = "#d97706";
