@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   getDefaultSession,
   handleIncomingRedirect,
@@ -8,6 +7,7 @@ import {
   logout,
   type Session,
 } from "@inrupt/solid-client-authn-browser";
+import { useEffect, useState } from "react";
 
 const APP_NAME = "Mind Builder";
 
@@ -50,8 +50,7 @@ export function useSession(): {
   async function signIn(issuer: string) {
     await login({
       oidcIssuer: issuer,
-      redirectUrl:
-        typeof window !== "undefined" ? `${window.location.origin}/login/callback` : "",
+      redirectUrl: typeof window !== "undefined" ? `${window.location.origin}/login/callback` : "",
       clientName: APP_NAME,
     });
   }

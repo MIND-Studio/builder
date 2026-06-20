@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createProject, iterateProject } from "@/lib/builder/orchestrator";
 import { BridgeError } from "@/lib/builder/bridge-client";
+import { createProject, iterateProject } from "@/lib/builder/orchestrator";
 import { log } from "@/lib/util/log";
 
 export const runtime = "nodejs";
@@ -38,9 +38,6 @@ export async function POST(req: Request) {
   } catch (e) {
     const status = e instanceof BridgeError ? e.status : 500;
     log.error({ event: "builder.wish.failed", err: String(e) }, "wish failed");
-    return NextResponse.json(
-      { error: e instanceof Error ? e.message : "wish failed" },
-      { status },
-    );
+    return NextResponse.json({ error: e instanceof Error ? e.message : "wish failed" }, { status });
   }
 }

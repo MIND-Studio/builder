@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  ensureRoom,
-  postMessage,
-  type AuthenticatedFetch,
-} from "@/lib/solid/chat";
-import { projectRoomUrl, podRootFromWebId } from "@/lib/solid/pod";
+import { type AuthenticatedFetch, ensureRoom, postMessage } from "@/lib/solid/chat";
+import { podRootFromWebId, projectRoomUrl } from "@/lib/solid/pod";
 import type { MessageKind } from "./types";
 
 /** foaf:maker IRI for builder-authored (status / preview / question) messages. */

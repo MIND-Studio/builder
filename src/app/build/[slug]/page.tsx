@@ -1,22 +1,18 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useSession } from "@/lib/solid/session";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BuildLayout } from "@/components/BuildLayout";
-import { Conversation } from "@/components/Conversation";
-import { PreviewPane } from "@/components/PreviewPane";
 import { Composer } from "@/components/Composer";
 import type { ConnState } from "@/components/ConnectionStatus";
-import { listAllMessages, type ChatMessage } from "@/lib/solid/chat";
-import { humanizeSlug } from "@/lib/util/slug";
-import { subscribeToRoom } from "@/lib/solid/chat-subscription";
-import {
-  ACTIVE_STATUSES,
-  roomFor,
-  writeMessage,
-} from "@/lib/builder/conversation-client";
+import { Conversation } from "@/components/Conversation";
+import { PreviewPane } from "@/components/PreviewPane";
+import { ACTIVE_STATUSES, roomFor, writeMessage } from "@/lib/builder/conversation-client";
 import type { Project } from "@/lib/builder/types";
+import { type ChatMessage, listAllMessages } from "@/lib/solid/chat";
+import { subscribeToRoom } from "@/lib/solid/chat-subscription";
+import { useSession } from "@/lib/solid/session";
+import { humanizeSlug } from "@/lib/util/slug";
 
 type StatusEvent = { kind: ChatMessage["kind"]; body: string; previewUrl?: string };
 
@@ -121,7 +117,11 @@ export default function ProjectPage() {
       if (!webid || !solidFetch) return;
       setBusy(true);
       try {
-        await writeMessage(solidFetch, webid, slug, { body: wish, kind: "user-wish", author: webid });
+        await writeMessage(solidFetch, webid, slug, {
+          body: wish,
+          kind: "user-wish",
+          author: webid,
+        });
         const res = await fetch("/api/wish", {
           method: "POST",
           headers: { "content-type": "application/json", "x-mind-webid": webid },
@@ -148,11 +148,7 @@ export default function ProjectPage() {
   );
 
   if (loading || !loggedIn) {
-    return (
-      <main className="mx-auto max-w-2xl px-6 py-16 text-muted-foreground">
-        Loading…
-      </main>
-    );
+    return <main className="mx-auto max-w-2xl px-6 py-16 text-muted-foreground">Loading…</main>;
   }
 
   const status = project?.status ?? "coder-running";
@@ -160,11 +156,7 @@ export default function ProjectPage() {
   const pagesUrl = project?.pagesUrl ?? null;
   const active = ACTIVE_STATUSES.has(status);
 
-  const workingLabel = busy
-    ? "Sending…"
-    : active
-      ? statusDetail
-      : undefined;
+  const workingLabel = busy ? "Sending…" : active ? statusDetail : undefined;
 
   return (
     <BuildLayout

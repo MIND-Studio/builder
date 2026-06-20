@@ -125,10 +125,7 @@ export async function createRepo(
   return call(webId, "/api/repos", { method: "POST", body: args });
 }
 
-export async function getRepo(
-  owner: string,
-  name: string,
-): Promise<{ repo: BridgeRepo } | null> {
+export async function getRepo(owner: string, name: string): Promise<{ repo: BridgeRepo } | null> {
   try {
     return await call(null, `/api/repos/${owner}/${name}`);
   } catch (e) {
@@ -149,10 +146,7 @@ export async function enablePages(
   });
 }
 
-export async function getPages(
-  owner: string,
-  name: string,
-): Promise<{ pages: BridgePages }> {
+export async function getPages(owner: string, name: string): Promise<{ pages: BridgePages }> {
   return call(null, `/api/repos/${owner}/${name}/pages`);
 }
 
@@ -322,10 +316,7 @@ export async function setAiKey(
   });
 }
 
-export async function deleteAiKey(
-  webId: string,
-  provider: string,
-): Promise<{ ok: boolean }> {
+export async function deleteAiKey(webId: string, provider: string): Promise<{ ok: boolean }> {
   return call(webId, `/api/profile/ai/keys/${provider}`, { method: "DELETE" });
 }
 
@@ -341,9 +332,7 @@ export async function setAiPref(
 }
 
 /** Whether the bridge holds a delegated pod-write grant for this WebID. */
-export async function getConnection(
-  webId: string,
-): Promise<{ connected: boolean }> {
+export async function getConnection(webId: string): Promise<{ connected: boolean }> {
   return call(null, `/api/identities/${encodeURIComponent(webId)}`);
 }
 

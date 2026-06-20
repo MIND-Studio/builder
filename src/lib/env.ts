@@ -34,11 +34,9 @@ export const bridgeMode: BridgeMode =
 // server authenticates to the bridge as the requesting WebID via
 // X-Mind-Service-Secret + X-Mind-On-Behalf-Of — the production path (the dev
 // X-Mind-Dev-WebId header is ignored by a prod bridge). Server-only.
-export const bridgeServiceSecret =
-  process.env.BUILDER_BRIDGE_SERVICE_SECRET?.trim() || null;
+export const bridgeServiceSecret = process.env.BUILDER_BRIDGE_SERVICE_SECRET?.trim() || null;
 
-export const indexerDataDir =
-  process.env.INDEXER_DATA_DIR ?? "./.builder-data";
+export const indexerDataDir = process.env.INDEXER_DATA_DIR ?? "./.builder-data";
 
 function trimSlash(url: string): string {
   return url.endsWith("/") ? url.slice(0, -1) : url;

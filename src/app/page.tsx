@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { MindLoginCard, writeLastIdentity } from "@mind-studio/core";
 import { Badge, Card, CardContent } from "@mind-studio/ui";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { APP_NAME, oidcIssuer } from "@/lib/config";
 import { useSession } from "@/lib/solid/session";
-import { oidcIssuer, APP_NAME } from "@/lib/config";
 
 export default function HomePage() {
   const { webid, loggedIn, loading, signIn } = useSession();
@@ -29,7 +29,10 @@ export default function HomePage() {
       {/* ---- Hero ---- */}
       <section className="grid items-center gap-12 pt-4 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pt-10">
         <div className="fade-up" style={{ animationDelay: "0.05s" }}>
-          <Badge variant="secondary" className="mb-5 gap-2 rounded-full px-3 py-1 text-xs font-medium">
+          <Badge
+            variant="secondary"
+            className="mb-5 gap-2 rounded-full px-3 py-1 text-xs font-medium"
+          >
             <span className="soft-pulse inline-block size-1.5 rounded-full bg-primary" />
             Build anything, just by asking
           </Badge>
@@ -41,8 +44,8 @@ export default function HomePage() {
           </h1>
 
           <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-muted-foreground sm:text-lg">
-            Tell us the website or app you wish you had — in your own everyday
-            words. We make it real and hand you a link you can open and share.{" "}
+            Tell us the website or app you wish you had — in your own everyday words. We make it
+            real and hand you a link you can open and share.{" "}
             <span className="font-medium text-foreground">
               No coding. No setup. Nothing to install.
             </span>{" "}
@@ -139,8 +142,8 @@ export default function HomePage() {
               What will you make today?
             </h2>
             <p className="mx-auto mt-3 max-w-md text-muted-foreground">
-              Sign in above and type your very first wish. A page for your
-              business, a fun game, a tool you’ve always wanted — start anywhere.
+              Sign in above and type your very first wish. A page for your business, a fun game, a
+              tool you’ve always wanted — start anywhere.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-2">
               {[
@@ -149,7 +152,11 @@ export default function HomePage() {
                 "a birthday invitation page",
                 "a tic-tac-toe game",
               ].map((s) => (
-                <Badge key={s} variant="outline" className="rounded-full px-3 py-1.5 text-[13px] font-normal">
+                <Badge
+                  key={s}
+                  variant="outline"
+                  className="rounded-full px-3 py-1.5 text-[13px] font-normal"
+                >
                   “{s}”
                 </Badge>
               ))}
@@ -194,12 +201,16 @@ function Aura() {
     <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
       <div
         className="aura absolute -top-24 left-1/4 size-[34rem] rounded-full blur-[120px]"
-        style={{ background: "radial-gradient(circle, color-mix(in oklch, var(--primary) 18%, transparent), transparent 70%)" }}
+        style={{
+          background:
+            "radial-gradient(circle, color-mix(in oklch, var(--primary) 18%, transparent), transparent 70%)",
+        }}
       />
       <div
         className="aura absolute -right-20 top-1/3 size-[26rem] rounded-full blur-[120px]"
         style={{
-          background: "radial-gradient(circle, color-mix(in oklch, var(--primary) 12%, transparent), transparent 70%)",
+          background:
+            "radial-gradient(circle, color-mix(in oklch, var(--primary) 12%, transparent), transparent 70%)",
           animationDelay: "-4s",
         }}
       />
@@ -269,8 +280,14 @@ function AppMock() {
           <Bee />
           <div className="flex items-center gap-1.5 rounded-2xl rounded-bl-md bg-muted px-3.5 py-3">
             <span className="demo-dot inline-block size-1.5 rounded-full bg-primary" />
-            <span className="demo-dot inline-block size-1.5 rounded-full bg-primary" style={{ animationDelay: "0.15s" }} />
-            <span className="demo-dot inline-block size-1.5 rounded-full bg-primary" style={{ animationDelay: "0.3s" }} />
+            <span
+              className="demo-dot inline-block size-1.5 rounded-full bg-primary"
+              style={{ animationDelay: "0.15s" }}
+            />
+            <span
+              className="demo-dot inline-block size-1.5 rounded-full bg-primary"
+              style={{ animationDelay: "0.3s" }}
+            />
             <span className="ml-1.5 text-[12px] text-muted-foreground">Building your website…</span>
           </div>
         </div>
@@ -281,7 +298,9 @@ function AppMock() {
           <div className="min-w-0 flex-1 overflow-hidden rounded-2xl rounded-bl-md border bg-card">
             <div className="flex items-center gap-2 px-3.5 pt-3">
               <span className="soft-pulse inline-block size-2 rounded-full bg-primary" />
-              <span className="text-[11px] font-semibold text-primary">Your website is ready 🎉</span>
+              <span className="text-[11px] font-semibold text-primary">
+                Your website is ready 🎉
+              </span>
             </div>
             {/* mini rendered "site" */}
             <div className="mx-3.5 mt-2.5 overflow-hidden rounded-lg border bg-background">

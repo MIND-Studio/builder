@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { Button, Textarea } from "@mind-studio/ui";
+import { useEffect, useRef, useState } from "react";
 
 const MAX_LEN = 4000;
 

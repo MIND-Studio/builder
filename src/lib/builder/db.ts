@@ -1,8 +1,8 @@
-import Database from "better-sqlite3";
 import { mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import Database from "better-sqlite3";
 import { indexerDataDir } from "@/lib/env";
 import type { Project, ProjectStatus } from "./types";
 
@@ -26,9 +26,7 @@ function openAt(dir: string): Database.Database {
   // Tiny forward-migration for the non-authoritative cache: add columns that
   // postdate an existing builder.db (CREATE TABLE IF NOT EXISTS won't add them).
   try {
-    db.exec(
-      "ALTER TABLE project_progress ADD COLUMN last_agent_run_id INTEGER NOT NULL DEFAULT 0",
-    );
+    db.exec("ALTER TABLE project_progress ADD COLUMN last_agent_run_id INTEGER NOT NULL DEFAULT 0");
   } catch {
     // column already exists — fine
   }
@@ -90,9 +88,9 @@ function toProject(row: ProjectRow): Project {
 }
 
 export function getProject(slug: string): Project | null {
-  const row = getDb()
-    .prepare("SELECT * FROM projects WHERE slug = ?")
-    .get(slug) as ProjectRow | undefined;
+  const row = getDb().prepare("SELECT * FROM projects WHERE slug = ?").get(slug) as
+    | ProjectRow
+    | undefined;
   return row ? toProject(row) : null;
 }
 
@@ -133,9 +131,7 @@ export function setStatus(
   updatedAt: number,
 ): void {
   getDb()
-    .prepare(
-      "UPDATE projects SET status = ?, status_detail = ?, updated_at = ? WHERE slug = ?",
-    )
+    .prepare("UPDATE projects SET status = ?, status_detail = ?, updated_at = ? WHERE slug = ?")
     .run(status, statusDetail, updatedAt, slug);
 }
 
@@ -162,9 +158,9 @@ type ProgressRow = {
 };
 
 export function getProgress(slug: string): Progress {
-  const row = getDb()
-    .prepare("SELECT * FROM project_progress WHERE slug = ?")
-    .get(slug) as ProgressRow | undefined;
+  const row = getDb().prepare("SELECT * FROM project_progress WHERE slug = ?").get(slug) as
+    | ProgressRow
+    | undefined;
   if (!row) {
     return {
       slug,

@@ -9,12 +9,12 @@ import {
   getThing,
   getThingAll,
   getUrl,
+  type SolidDataset,
   saveSolidDatasetAt,
   setThing,
-  type SolidDataset,
 } from "@inrupt/solid-client";
-import { ulid } from "@/lib/util/ulid";
 import type { MessageKind } from "@/lib/builder/types";
+import { ulid } from "@/lib/util/ulid";
 
 // SolidOS long-chat vocabulary (interop with the SolidOS chat-pane), plus a
 // small `mind:` extension to type builder status / preview-card messages
@@ -98,10 +98,7 @@ export async function ensureRoom(
 }
 
 /** Idempotently create today's empty day file (required before subscribing). */
-export async function ensureTodayFile(
-  roomUrl: string,
-  fetch: AuthenticatedFetch,
-): Promise<string> {
+export async function ensureTodayFile(roomUrl: string, fetch: AuthenticatedFetch): Promise<string> {
   const dayUrl = dayFileUrl(roomUrl);
   try {
     await getSolidDataset(dayUrl, { fetch });
