@@ -152,8 +152,14 @@ export function AiSettings({ webid }: { webid: string | null }) {
     if (!data) return null;
     if (data.summary.source === "user-pref")
       return `Right now your apps are built with ${data.summary.providerLabel} · ${data.summary.model}.`;
-    if (data.summary.source === "env-fallback")
+    if (data.summary.source === "env-fallback") {
+      const free = data.freeBalance;
+      if (typeof free === "number" && free <= 0)
+        return "You’ve used your free AI allotment. Add your own key below to keep building.";
+      if (typeof free === "number")
+        return `Right now your apps are built with the free built-in AI — ${free} free MIND left. Add your own key for a faster, smarter AI.`;
       return "Right now your apps are built with the free built-in AI.";
+    }
     return "No AI is set up yet — add a key below to start building.";
   })();
 
