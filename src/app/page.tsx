@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { MindLoginCard, writeLastIdentity } from "@mind-studio/core";
 import { Badge, Card, CardContent } from "@mind-studio/ui";
 import { useSession } from "@/lib/solid/session";
-import { oidcIssuer, APP_NAME, ACCENT } from "@/lib/config";
+import { oidcIssuer, APP_NAME } from "@/lib/config";
 
 export default function HomePage() {
   const { webid, loggedIn, loading, signIn } = useSession();
@@ -53,7 +53,6 @@ export default function HomePage() {
             <MindLoginCard
               appName={APP_NAME}
               defaultIssuer={oidcIssuer}
-              accent={ACCENT}
               onLogin={async ({ issuer }) => {
                 await signIn(issuer);
               }}
