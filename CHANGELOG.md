@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/MIND-Studio/builder/compare/v0.3.0...v0.4.0) (2026-06-20)
+
+
+### Features
+
+* adopt ui ^0.4.0 fonts + core ^0.7.0 login accent ([#11](https://github.com/MIND-Studio/builder/issues/11)) ([62545a6](https://github.com/MIND-Studio/builder/commit/62545a64b5a8a080395929fa22bb3313a703fa91))
+
 ## [0.3.0](https://github.com/MIND-Studio/builder/compare/v0.2.0...v0.3.0) (2026-06-14)
 
 
