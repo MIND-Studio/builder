@@ -298,6 +298,12 @@ export type AiSettings = {
   providers: AiConfiguredProvider[];
   pref: AiPref;
   summary: AiSummary;
+  /**
+   * Remaining free MIND allotment, when the coder would run on the bridge's
+   * built-in key and the ledger is on. null when on the user's own key or the
+   * ledger is off — render the source-based copy unchanged.
+   */
+  freeBalance?: number | null;
   catalog: AiCatalogEntry[];
 };
 
