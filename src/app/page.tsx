@@ -1,7 +1,7 @@
 "use client";
 
 import { MindLoginCard, writeLastIdentity } from "@mind-studio/core";
-import { Badge, Card, CardContent } from "@mind-studio/ui";
+import { Badge, Card, CardContent, Logo } from "@mind-studio/ui";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { APP_NAME, oidcIssuer } from "@/lib/config";
@@ -177,12 +177,7 @@ export default function HomePage() {
 function TopBar() {
   return (
     <header className="flex items-center justify-between py-7">
-      <div className="flex items-center gap-2.5">
-        <span className="grid size-8 place-items-center rounded-xl bg-primary text-[15px] text-primary-foreground shadow-sm">
-          ✦
-        </span>
-        <span className="text-lg font-bold tracking-tight">Mind Builder</span>
-      </div>
+      <Logo label="Builder" />
       <nav className="hidden items-center gap-6 text-[13px] text-muted-foreground sm:flex">
         <a className="transition hover:text-foreground" href="#how">
           How it works
