@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/MIND-Studio/builder/compare/v0.4.0...v0.5.0) (2026-06-21)
+
+
+### Features
+
+* adopt brand lockup + canonical icons (ui[#29](https://github.com/MIND-Studio/builder/issues/29) wave 2) ([#15](https://github.com/MIND-Studio/builder/issues/15)) ([61f0055](https://github.com/MIND-Studio/builder/commit/61f0055b7aa0a327a35e6c2365d8656efb7db560))
+
 ## [0.4.0](https://github.com/MIND-Studio/builder/compare/v0.3.0...v0.4.0) (2026-06-20)
 
 
